@@ -1,3 +1,5 @@
+from response import Response
+
 class SnailApi:
 
     def __init__(self):
@@ -14,24 +16,21 @@ class SnailApi:
 
         handler = self.routes.get(path)
         if req_method in handler:
-            print(handler)
-            start_response("200 OK", [('Content-Type','Text/HTML')])
+            response = Response()
+            
+            handler[req_method](response)
+            return response.asgi(start_response)
 
-
-            return handler[req_method]()
         else:
             start_response("200 OK", [('Content-Type','Text/Plain')])
             return [b"method not allowed bro or the route dont exist!"]
-            
-            
-            
+
+
     def add_to_route(self, path, method, handler):
         if path not in self.routes:
             self.routes[path] = {}
+            
         self.routes[path][method] = handler
-        
-        print(self.routes)
-        
         return handler
 
 
