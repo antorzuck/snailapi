@@ -6,5 +6,5 @@ app = SnailApi()
 
 @app.get("/home")
 def user(res):
-    return res.send('{"nal":"kaj"}')
+    return res.send({"nal":"kaj"})
 

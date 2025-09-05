@@ -20,9 +20,7 @@ class Response:
             
         elif isinstance(data, dict):
             
-            self.data = [json.dumps(data).encode("utf-8")]          
+            self.data = [json.dumps(data).encode("utf-8")]
             self.headers.append(("Content-Type", "application/json"))
-        
         else:
-            self.data = [json.dumps({"msg" : "data should be str or      dict"}).encode("utf-8")]          
-            self.headers.append(("Content-Type", "application/json"))
+            raise "What the fuck you trying to send bruh."

@@ -1,26 +1,23 @@
 from response import Response
-from request import Request
-
 
 class SnailApi:
 
     def __init__(self):
         self.routes = dict()
+        print(self.routes)
 
 
     def __call__(self, environ, start_response):
-       
-        request = Request(environ)
-        handler = self.routes.get(request.path)
-        
-        if request.method in handler:
+
+        handler = self.routes.get(path)
+        if req_method in handler:
             response = Response()
-            handler[request.method](request, response)
             
+            handler[req_method](response)
             return response.asgi(start_response)
 
         else:
-            start_response("200 OK", [('Content-Type','application/json')])
+            start_response("200 OK", [('Content-Type','Text/Plain')])
             return [b"method not allowed bro or the route dont exist!"]
 
 
