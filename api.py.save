@@ -8,15 +8,13 @@ def test(req, res):
        return True
 
 
-
 app = SnailApi()
-
 app.add_middleware(test)
 
 
 @app.get("/home")
 def user(req, res):
-    
+
     return res.send({
     "method":req.method,
     "q" : req.GET.get('q')

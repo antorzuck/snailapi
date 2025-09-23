@@ -6,20 +6,24 @@ class SnailApi:
 
     def __init__(self):
         self.routes = dict()
+        self.middleware = []
 
 
     def __call__(self, environ, start_response):
        
         request = Request(environ)
+        response = Response()
         handler = self.routes.get(request.path)
-        
-        if request.method in handler:
-            response = Response()
-            handler[request.method](request, response)
-            
-            return response.asgi(start_response)
+        for mid in self.middleware:
+            middleware_response = mid(request, response)
+            if not middleware_response == True:
+                return response.asgi(start_response)
+        try:
+            if request.method in handler:
+                handler[request.method](request, response)
+                return response.asgi(start_response)
 
-        else:
+        except Exception as e:
             start_response("200 OK", [('Content-Type','application/json')])
             return [b"method not allowed bro or the route dont exist!"]
 
@@ -57,3 +61,6 @@ class SnailApi:
         return wrapper    
 
 
+    def add_middleware(self, func):
+        self.middleware.append(func)
+        print(self.middleware)
